@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samoan Multiple-Choice Quiz</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0f172a;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.container {
+    max-width: 500px;
+    padding: 20px;
+    background-color: #1e293b;
+    border-radius: 10px;
+    text-align: center;
+}
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #334155;
+    color: white;
+}
+button:hover {
+    background-color: #475569;
+}
+.correct {
+    background-color: #16a34a !important;
+}
+.wrong {
+    background-color: #dc2626 !important;
+}
+#score {
+    margin-top: 15px;
+    font-size: 18px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Samoan Vocabulary Quiz</h2>
+    <p id="question"></p>
+    <div id="choices"></div>
+    <p id="score">Score: 0</p>
+    <button onclick="nextQuestion()">Next</button>
+</div>
+
+<script>
+const quizData = [
+    { question: "Kitchen", correct: "umukuka", options: ["umukuka", "maketi", "fale", "potu"] },
+    { question: "Market", correct: "maketi", options: ["umukuka", "maketi", "faleoloa", "togāla’au"] },
+    { question: "Store", correct: "faleoloa", options: ["faleoloa", "umukuka", "potu", "ekalesia"] },
+    { question: "House", correct: "fale", options: ["fale", "potu", "ekalesia", "togāla’au"] },
+    { question: "Room", correct: "potu", options: ["fale", "potu", "maketi", "faleoloa"] },
+    { question: "Church", correct: "ekalesia", options: ["maketi", "togāla’au", "ekalesia", "potu"] },
+    { question: "Yard", correct: "togāla’au", options: ["faleoloa", "togāla’au", "umukuka", "fale"] },
+    { question: "Boy", correct: "tama", options: ["tama", "teine", "tinā", "tagata"] },
+    { question: "Girl", correct: "teine", options: ["tama", "teine", "tinā", "tagata"] },
+    { question: "Mom", correct: "tinā", options: ["tama", "teine", "tinā", "tagata"] },
+    { question: "Men", correct: "tane", options: ["tagata", "tane", "tamaiti", "tamaitiiti"] },
+    { question: "Children", correct: "tamaiti", options: ["tamaiti", "tamaitiiti", "tama", "teine"] },
+    { question: "Child", correct: "tamaitiiti", options: ["tamaiti", "tamaitiiti", "tama", "teine"] },
+    { question: "To go", correct: "alu", options: ["alu", "savali", "moe", "kuka"] },
+    { question: "To walk", correct: "savali", options: ["alu", "savali", "moe", "inu"] },
+    { question: "To sleep (sing.)", correct: "moe", options: ["moe", "momoe", "kuka", "faitau"] },
+    { question: "To sleep (pl.)", correct: "momoe", options: ["moe", "momoe", "alu", "faitau"] },
+    { question: "To cook", correct: "kuka", options: ["moe", "kuka", "faitau", "ta’alo"] },
+    { question: "To read", correct: "faitau", options: ["faitau", "ta’alo", "kuka", "alu"] },
+    { question: "To play", correct: "ta’alo", options: ["faitau", "ta’alo", "alu", "moe"] },
+    { question: "To drink", correct: "inu", options: ["faitau", "inu", "moe", "alu"] }
+];
+
+let score = 0;
+let currentQuestion = 0;
+
+function loadQuestion() {
+    const q = quizData[currentQuestion];
+    document.getElementById("question").innerText = `Translate: ${q.question}`;
+    const choicesDiv = document.getElementById("choices");
+    choicesDiv.innerHTML = "";
+    q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.innerText = option;
+        btn.onclick = () => selectAnswer(btn, option, q.correct);
+        choicesDiv.appendChild(btn);
+    });
+}
+
+function selectAnswer(button, selected, correct) {
+    const buttons = document.querySelectorAll("#choices button");
+    buttons.forEach(btn => btn.disabled = true);
+    if (selected === correct) {
+        button.classList.add("correct");
+        score++;
+    } else {
+        button.classList.add("wrong");
+        buttons.forEach(btn => {
+            if (btn.innerText === correct) btn.classList.add("correct");
+        });
+    }
+    document.getElementById("score").innerText = `Score: ${score}`;
+}
+
+function nextQuestion() {
+    currentQuestion++;
+    if (currentQuestion >= quizData.length) {
+        alert(`Game Over! Your final score is ${score}/${quizData.length}`);
+        currentQuestion = 0;
+        score = 0;
+        document.getElementById("score").innerText = `Score: ${score}`;
+    }
+    loadQuestion();
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
